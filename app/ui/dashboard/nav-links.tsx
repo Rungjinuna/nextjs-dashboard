@@ -1,8 +1,13 @@
+'use client';
+
 import {
   UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -17,19 +22,27 @@ const links = [
 ];
 
 export default function NavLinks() {
+  const pathname = usePathname();
   return (
     <>
       {links.map((link) => {
         const LinkIcon = link.icon;
         return (
-          <a
+          //a가 아니라 Nextjs Link로 새로고침을 하지 않고도 페이지를 오갈수있다.
+          <Link
             key={link.name}
             href={link.href}
-            className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
+            // clsx를 사용하여 pathname이 link.href와 일치하면 스타일링 적용
+            className={clsx(
+              'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+              {
+                'bg-sky-100 text-blue-600': pathname === link.href,
+              },
+            )}
           >
             <LinkIcon className="w-6" />
             <p className="hidden md:block">{link.name}</p>
-          </a>
+          </Link>
         );
       })}
     </>
